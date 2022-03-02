@@ -1,0 +1,25 @@
+is me hm flask-restfull use kren ge ye module thori limitations lgaa taa he lekin kaafi flexible restfull k lia.
+
+resource are usually map into database tables, and it can be any item that flask return.
+
+Api desing is an art. phele request bnaaen un ki description likhen decision len phir endpoints bnaen
+
+most popular status code is 200
+
+not found is 404
+
+202 item is accepted but require time to create object
+
+400 bad request
+
+requestparser make sure krta he k jo data chahiye wo hi aae kuch or aae to wo auto error pass kr de
+
+
+error first approach: first filter all erorrs then load data and do further work
+
+@jwt_required() :  jis k oopr lgaaenge use call krne k lia token paas krna hoga
+
+request: jo bhi data payload me aae ga use request.get_json() se utha skte hen
+
+reqparse :  se bhi payload ka data utha skten plus security bhi lgaa skte hen k jo data chahiye agr wo na 
+ae to error message through kr de.
