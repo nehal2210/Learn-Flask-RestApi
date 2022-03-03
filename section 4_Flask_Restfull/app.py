@@ -1,12 +1,11 @@
 '''This is the main file which contains all the end points'''
 
 
-
 from flask import Flask
 from flask_restful import Resource, Api, reqparse
 from flask_jwt import JWT, jwt_required
 from security import authenticate, identity
-
+import enum
 app = Flask(__name__)
 app.secret_key = 'sdfdslfls@#1223$lskd'
 api = Api(app)
@@ -14,6 +13,23 @@ api = Api(app)
 jwt = JWT(app,authenticate, identity) # gives /auth end point
 
 items: list = []
+
+
+
+
+
+
+
+# Using enum class create enumerations
+class http_status(enum.Enum):
+   Ok = 200
+   Created = 201
+   Accepted = 202
+   BadRequest = 400
+   Unauthorized = 401
+   NotFound = 404
+
+
 
 
 class Item(Resource):
@@ -26,7 +42,7 @@ class Item(Resource):
         '''End Point of GET request which takes name and return the whole information about the item in json'''
 
         item: dict = next(filter(lambda x:x['name'] == name, items), None)
-        return item, 200 if item else 404
+        return item, http_status.Ok if item else http_status.NotFound
 
     
     
@@ -34,12 +50,12 @@ class Item(Resource):
         '''End point of POST request which takes name and save the information about the item'''
 
         if next(filter(lambda x:x['name'] == name, items), None) is not None:
-            return {"message": "name {} already exist".format(name)}, 400
+            return {"message": "name {} already exist".format(name)}, http_status.BadRequest
 
         data: dict = Item.parser.parse_args()
         item: dict = {"name": name, "price": data["price"]} 
         items.append(item)
-        return item, 201
+        return item, http_status.Created
     
     
     
@@ -50,7 +66,7 @@ class Item(Resource):
             if item["name"] == name:
                 del items[i]
 
-        return {"message": "item deleted"}
+        return {"message": "item deleted"}, http_status.Ok
 
    
    
@@ -65,7 +81,7 @@ class Item(Resource):
         else:
             item.update(data)
 
-        return item
+        return item, http_status.Created
 
 
 
@@ -73,7 +89,7 @@ class ItemList(Resource):
     def get(self) -> dict:
         '''End point of GET which return the whole list of items'''
 
-        return {"items": items}
+        return {"items": items}, http_status.Ok
 
 
 

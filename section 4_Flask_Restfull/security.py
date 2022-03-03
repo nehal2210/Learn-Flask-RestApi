@@ -1,3 +1,4 @@
+'''This File is the requirement of JWT to authenticate user'''
 
 from user import User
 
