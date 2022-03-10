@@ -3,8 +3,8 @@
 from user import User
 
 users: list = [
-    User(1,"bob","abc123"),
-    User(2,"alice","345"),
+    User(1, "bob", "abc123"),
+    User(2, "alice", "345"),
 ]
 
 #{userName: userObject}
